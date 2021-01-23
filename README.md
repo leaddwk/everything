@@ -1,1 +1,1 @@
-# nintendo switch emulator files download for everyone
+# Nintendo switch emulator files download for everyone
