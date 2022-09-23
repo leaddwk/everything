@@ -1,0 +1,86 @@
+on first join:
+    set join message to "&l&d첫 모험가%player%님이 서버에 첫 발을 디뎠습니다!"
+on join:
+    set join message to "&l&b%player%님이 서버에 온라인 상태입니다!"
+on quit:
+    set quit message to "&l&b소환사 %player%님이 게임을 종료했습니다!"
+on death of player:
+    if attacker is player:
+        set the death message to "%attacker%님이 %victim%님을 %attacker's tool%을 사용하여 처치[+100]"
+        stop
+    if attacker is zombie:
+        set the death message to "%victim%처치[+좀비]"
+        stop
+    if attacker is creeper:
+        set the death message to "김두한(크리퍼) : 함께 폭★사하자![+%victim%]"
+        stop
+    if damage was caused by fall:
+        set the death message to "%victim%님이 낮은곳애서 떨어져 크게 다쳤습니다![+낙사]"
+        stop
+    if damage was caused by void:
+        set the death message to "지구는 둥그니까 지구 반대편으로 나가면 온 세상 어린이를 다 만나고 오겠네~![+%victim%]"
+        stop
+    if damage was caused by drowning:
+        set the death message to "구명조끼는 필수입니다![+공익광고 협의회]"
+        stop
+    if damage was caused by lava:
+        set the death message to "육수가 우러났습니다[+사골]"
+        stop
+    if damage was caused by potion:
+        set the death message to "%victim%님이 Danger(을)를 단거로 읽었습니다![+당분 과다 섭취]"
+        stop
+    if death message contains "died":
+        set the death message to "게임은 그저 게임일 뿐-%victim%-"
+        stop
+    if death message contains "burned":
+        set the death message to "%victim%:아~.여기 미디움레어요[+웰던]"
+        stop
+    if death message contains "blown":
+        set the death message to "%victim%님이 있었는데 없었습니다!"
+        stop
+every 1 tick:
+    loop all players:
+        if {상태.%loop-player%} is true:
+            set {_loc} to loop-player's location
+            send action bar "%{_loc}%" to loop-player
+command /현재위치 [<string>]:
+    trigger:
+        if arg 1 is "켜기":
+            set {상태.%player%} to true
+            message "현재 위치 표시가 켜짐!"
+        if arg 1 is "끄기":
+            set {상태.%player%} to false
+            send action bar " " to player
+            message "현재 위치 표시가 꺼짐!"
+command /순간이동 [<string>]:
+    trigger:
+        if arg 1 is "거점1설정":
+            set {l1} to location of player
+            set {msg1::x} to "%round x-coord of {l1}%"
+            set {msg1::y} to "%round y-coord of {l1}%"
+            set {msg1::z} to "%round z-coord of {l1}%"
+            message "거점1이 %{msg1::x}% %{msg1::y}% %{msg1::z}%로 설정됨!"
+        if arg 1 is "거점2설정":
+            set {l2} to location of player
+            set {msg2::x} to "%round x-coord of {l2}%"
+            set {msg2::y} to "%round y-coord of {l2}%"
+            set {msg2::z} to "%round z-coord of {l2}%"
+            message "거점2이 %{msg2::x}% %{msg2::y}% %{msg2::z}%로 설정됨!"
+        if arg 1 is "거점3설정":
+            set {l3} to location of player
+            set {msg3::x} to "%round x-coord of {l3}%"
+            set {msg3::y} to "%round y-coord of {l3}%"
+            set {msg3::z} to "%round z-coord of {l3}%"
+            message "거점3이 %{msg3::x}% %{msg3::y}% %{msg3::z}%로 설정됨!"
+        if arg 1 is "거점1가기":
+            execute player command "/tp %{msg1::x}% %{msg1::y}% %{msg1::z}%"
+            message "거점1로 이동함!"
+        if arg 1 is "거점2가기":
+            execute player command "/tp %{msg2::x}% %{msg2::y}% %{msg2::z}%"
+            message "거점2로 이동함!"
+        if arg 1 is "거점3가기":
+            execute player command "/tp %{msg3::x}% %{msg3::y}% %{msg3::z}%"
+            message "거점3로 이동함!"
+on swap hand items:
+    open chest with 3 rows named "&a기본메뉴" to player
+    format slot 10 of player with barrier named "캐릭터 재설정" with lore "누르면 사망합니다." to close then run [execute player command "/kill"]
